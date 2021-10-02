@@ -1,4 +1,4 @@
-# Ruby_Code_Converter
+# Ретранслятор под Ruby
 
 This program was developed by me for the analysis of small, simple programs written in the Ruby programming language. 
 
