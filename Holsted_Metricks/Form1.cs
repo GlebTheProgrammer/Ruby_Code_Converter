@@ -338,7 +338,7 @@ namespace Holsted_Metricks
                 }
             }
 
-            for (int i = 0; i < codeArray.Length; i++)  // Цикл, который собирает операнды в скобках
+            for (int i = 0; i < codeArray.Length; i++)  // Цикл, который собирает операнды в скобках и в выражении when
             {
                 for (int j = 0; j < codeArray[i].Length; j++)
                 {
@@ -371,6 +371,50 @@ namespace Holsted_Metricks
                                 break;
                             }
                         }
+                    }
+                    if (codeArray[i][j] == '(')
+                    {
+                        j++;
+                        string tempString = "";
+                        while (codeArray[i][j] != ')')
+                        {
+                            tempString += codeArray[i][j];
+                            j++;
+                        }
+
+                        for (int k = 0, tempIndex = 0; k < tempString.Length; k++)
+                        {
+                            if (tempString[k] == ' ')
+                            {
+                                if (int.TryParse(tempString.Substring(tempIndex, k - tempIndex), out _))
+                                {
+                                    if (!operandsList.Contains(tempString.Substring(tempIndex, k - tempIndex)))
+                                        operandsList.Add(tempString.Substring(tempIndex, k - tempIndex));
+                                }
+                                tempIndex = k + 1;
+                                continue;
+                            }
+                            if (k + 1 == tempString.Length)
+                            {
+                                if (int.TryParse(tempString.Substring(tempIndex, k - tempIndex + 1), out _) && !operandsList.Contains(tempString.Substring(tempIndex, k - tempIndex + 1)))
+                                    operandsList.Add(tempString.Substring(tempIndex, k - tempIndex + 1));
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (codeArray[i].Contains("when "))
+                {
+                    int probelCount = 0;
+                    for (int j = 0; j < codeArray[i].Length; j++)
+                    {
+                        if (codeArray[i][j] == ' ')
+                            probelCount++;
+                    }
+                    if (probelCount == 1)
+                    {
+                        if (int.TryParse(codeArray[i].Substring(codeArray[i].IndexOf(' ')+1, codeArray[i].Length - codeArray[i].IndexOf(' ') - 1), out _))
+                            operandsList.Add(codeArray[i].Substring(codeArray[i].IndexOf(' ') + 1, codeArray[i].Length - codeArray[i].IndexOf(' ') - 1));
                     }
                 }
             }
